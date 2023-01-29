@@ -1,0 +1,22 @@
+{
+  "name": "gelato.webhooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashpoolin/gelato.webhooks.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashpoolin/gelato.webhooks/issues"
+  },
+  "homepage": "https://github.com/ashpoolin/gelato.webhooks#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
