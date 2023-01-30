@@ -5,7 +5,7 @@ const port = 3000;
 app.use(express.json());
 
 app.post("/webhooks", (req, res) => {
-    const data = JSON.parse(req.body);
+    const { data } = req;
     // const data = req.body;
     // console.log(`resp: ${req.body}`)
     const LAMPORTS_PER_SOL = 1000000000;
