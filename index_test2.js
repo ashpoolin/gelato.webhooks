@@ -12,7 +12,7 @@ app.post("/webhooks", (req, res) => {
     const slot = data.slot
     const blocktime = data.blockTime;
     const err = data.err;
-    const fee = data.meta.fee || 0; // LAMPORTS_PER_SOL;
+    const fee = data.meta.fee; // LAMPORTS_PER_SOL;
     let mint;
     data.transaction.message.instructions.map(instruction => {
         // console.log(instruction);

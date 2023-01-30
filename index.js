@@ -5,14 +5,12 @@ const port = 3000;
 app.use(express.json());
 
 app.post("/webhooks", (req, res) => {
-    const data = JSON.parse(req.body);
-    // const data = req.body;
-    // console.log(`resp: ${req.body}`)
+    const data = req.body[0];
     const LAMPORTS_PER_SOL = 1000000000;
     const slot = data.slot
     const blocktime = data.blockTime;
     const err = data.err;
-    const fee = data.meta.fee || 0; // LAMPORTS_PER_SOL;
+    const fee = data.meta.fee; // LAMPORTS_PER_SOL;
     let mint;
     data.transaction.message.instructions.map(instruction => {
         // console.log(instruction);
