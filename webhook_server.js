@@ -9,12 +9,8 @@ const pool = new Pool({
   });
 
 const insertParsedTransaction = (req) => {
-    const hw = req.body[0];
-    const bt = hw.blockTime;
-    console.log("resp: ", hw)
-
-    // ACTUAL PARSER CODE
     const data = req.body[0];
+    console.log("resp: ", data);
     const LAMPORTS_PER_SOL = 1000000000;
     const slot = data.slot
     const blocktime = data.blockTime;
@@ -26,10 +22,15 @@ const insertParsedTransaction = (req) => {
     console.log(`blocktime: ${blocktime}`);
     console.log(`err: ${err}`);
     console.log(`fee: ${fee}`);
-    data.transaction.message.instructions.map(instruction => {
-        console.log(`instruction: ${instruction.toString()}`);
+    data.transaction.message.instructions.map((instruction, index) => {
+        console.log(`instruction: ${JSON.stringify(instruction)}`);
         const program = instruction.program;
         console.log(`program: ${program}`);
+        console.log(`instruction.program: ${instruction.program}`);
+        const signature = data.transaction.signatures[0];
+        console.log(`signature: ${signature}`);        
+        const recent_blockhash = data.message.recentBlockhash;
+        console.log(`recent_blockhash: ${recent_blockhash}`);
         if ( program == 'system') {
             const destination = instruction.parsed.info.destination;
             const solAmount = instruction.parsed.info.lamports / LAMPORTS_PER_SOL;
