@@ -21,16 +21,27 @@ const insertParsedTransaction = (req) => {
     const err = data.err;
     const fee = data.meta.fee; // LAMPORTS_PER_SOL;
     let mint;
+
+    console.log(`slot: ${slot}`);
+    console.log(`blocktime: ${blocktime}`);
+    console.log(`err: ${err}`);
+    console.log(`fee: ${fee}`);
     data.transaction.message.instructions.map(instruction => {
-        // console.log(instruction);
+        console.log(`instruction: ${instruction.toString()}`);
         const program = instruction.program;
+        console.log(`program: ${program}`);
         if ( program == 'system') {
             const destination = instruction.parsed.info.destination;
             const solAmount = instruction.parsed.info.lamports / LAMPORTS_PER_SOL;
             const source = instruction.parsed.info.source;
+            console.log(`destination: ${destination}`);
+            console.log(`solAmount: ${solAmount}`);
+            console.log(`source: ${source}`);
             let type;
             try {
                 type = instruction.parsed.type;
+                console.log(`type: ${type}`);
+
             } catch {
                 type = '';
             }
