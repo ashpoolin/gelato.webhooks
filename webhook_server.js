@@ -36,6 +36,16 @@ const insertParsedTransaction = (req) => {
             }
             // console.log(`program,type,signature,err,slot,blocktime,fee,source,destination,solAmount`);
             console.log(`${program},${type},${signature},${err},${slot},${blocktime},${fee},${source},${destination},${solAmount}`);
+            return new Promise(function(resolve, reject) {
+                pool.query(`INSERT INTO webhooks_sol_event_log(program, type, signature, err, slot, blocktime, fee, source, destination, sol_amount) VALUES(${program},${type},${signature},${err},${slot},${blocktime},${fee},${source},${destination},${solAmount});`, (error, results) => {
+                  if (error) {
+                    reject(error)
+                  }
+                  resolve(results.rows);
+                  console.log("insert OK");
+            
+                })
+              })
         }
         else if (program == 'spl-associated-token-account' ) {
             try {
