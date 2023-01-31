@@ -1,13 +1,20 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+require('dotenv').config();
+const Pool = require('pg').Pool
+const pool = new Pool({
+    user: process.env.PGUSERNAME,
+    host: process.env.PGHOSTNAME,
+    database: process.env.PGDATABASE,
+    password: process.env.PGPASSWORD,
+    port: process.env.PGPORT,
+  });
 
-app.use(express.json());
+const insertParsedTransaction = (req) => {
+    const hw = req.body[0];
+    const bt = hw.blockTime;
+    console.log("resp: ", hw)
 
-app.post("/webhooks", (req, res) => {
-    const { data } = req;
-    // const data = req.body;
-    // console.log(`resp: ${req.body}`)
+    // ACTUAL PARSER CODE
+    const data = req.body[0];
     const LAMPORTS_PER_SOL = 1000000000;
     const slot = data.slot
     const blocktime = data.blockTime;
@@ -190,9 +197,38 @@ app.post("/webhooks", (req, res) => {
         else {
         }
     });
-// end of webhook block
-});
 
-app.listen(port, () => {
-    console.log(`Example server listening on port ${port}`)
-});
+  // TEST INSERT TO DATABASE
+  return new Promise(function(resolve, reject) {
+    pool.query(`INSERT INTO hello_world(first_col) VALUES('${bt}')`, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+      console.log("insert OK");
+
+    })
+  }) 
+}
+
+const test = () => {
+
+  return new Promise(function(resolve, reject) {
+    pool.query(`select * from hello_world;`, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+      console.log("test OK");
+    })
+  }) 
+}
+
+
+
+
+
+module.exports = {
+    insertParsedTransaction,
+    test
+  }
