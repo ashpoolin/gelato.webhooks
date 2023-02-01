@@ -27,9 +27,7 @@ const insertParsedTransaction = (req) => {
     data.transaction.message.accountKeys.map(akey => {
         console.log(akey);
     });
-    data.transaction.message.header.map(h => {
-        console.log(JSON.stringify(h));
-    });
+    console.log(JSON.stringify(header[0]));
     data.transaction.message.instructions.map((instruction, index) => {
         console.log(`instruction: ${JSON.stringify(instruction)}`);
         const program = instruction.program;
