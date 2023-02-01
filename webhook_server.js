@@ -1,5 +1,5 @@
 const { json } = require('express');
-
+const bs58 = require('bs58');
 require('dotenv').config();
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -35,8 +35,10 @@ const insertParsedTransaction = (req) => {
         if ( data.transaction.message.accountKeys[instruction.programIdIndex] == '11111111111111111111111111111111' && instruction.data.substring(0,2) == '3B') {
             console.log("we made it!")
             const program = 'system';
-            const source = data.transaction.message.accountKeys[instruction.accounts[0]].toBase58();
-            const destination = data.transaction.message.accountKeys[instruction.accounts[1]].toBase58();
+            // const source = data.transaction.message.accountKeys[instruction.accounts[0]].toBase58();
+            const source = bs58.encode((data.transaction.message.accountKeys[instruction.accounts[0]]).toBuffer('le', 8));
+            // const destination = data.transaction.message.accountKeys[instruction.accounts[1]].toBase58();
+            const destination = bs58.encode((data.transaction.message.accountKeys[instruction.accounts[1]]).toBuffer('le', 8));
             const lamports = Number((new Buffer((bs58.decode(instruction.data)).slice(4,12))).readBigUInt64LE());
             const decimals = 9;
             const solAmount = lamports / LAMPORTS_PER_SOL;
