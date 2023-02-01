@@ -1,3 +1,5 @@
+const { json } = require('express');
+
 require('dotenv').config();
 const Pool = require('pg').Pool
 const pool = new Pool({
@@ -22,6 +24,12 @@ const insertParsedTransaction = (req) => {
     console.log(`blocktime: ${blocktime}`);
     console.log(`err: ${err}`);
     console.log(`fee: ${fee}`);
+    data.transaction.message.accountKeys.map(akey => {
+        console.log(akey);
+    });
+    data.transaction.message.header.map(h => {
+        console.log(JSON.stringify(h));
+    });
     data.transaction.message.instructions.map((instruction, index) => {
         console.log(`instruction: ${JSON.stringify(instruction)}`);
         const program = instruction.program;
@@ -29,9 +37,7 @@ const insertParsedTransaction = (req) => {
         console.log(`instruction.program: ${instruction.program}`);
         const signature = data.transaction.signatures[0];
         console.log(`signature: ${signature}`);        
-        const recent_blockhash = data.message.recentBlockhash;
-        console.log(`recent_blockhash: ${recent_blockhash}`);
-        if ( program == 'system') {
+        if ( program === 'system') {
             const destination = instruction.parsed.info.destination;
             const solAmount = instruction.parsed.info.lamports / LAMPORTS_PER_SOL;
             const source = instruction.parsed.info.source;
@@ -59,14 +65,14 @@ const insertParsedTransaction = (req) => {
                 })
               })
         }
-        else if (program == 'spl-associated-token-account' ) {
+        else if (program === 'spl-associated-token-account' ) {
             try {
                 mint = instruction.parsed.info.mint;
             } catch {
 
             }
         }
-        else if (program == 'spl-token') {
+        else if (program === 'spl-token') {
             let indices = [];
             const preTokenBalances = data.meta.preTokenBalances;
             const postTokenBalances = data.meta.postTokenBalances;
@@ -144,7 +150,7 @@ const insertParsedTransaction = (req) => {
                     }
                 }
                 let direction = amountPost - amountPre > 0 ? 'in' : 'out';
-                if (direction == 'in') {
+                if (direction === 'in') {
                     accountIndexTo = accountIndexPre
                     mintTo = mintPre
                     ownerTo = ownerPre
@@ -152,7 +158,7 @@ const insertParsedTransaction = (req) => {
                     decimalsTo = decimalsPre
                     uiDeltaTo = uiAmountPost - uiAmountPre
                     uiAmountPostTo = uiAmountPost
-                } else if (direction == 'out') {
+                } else if (direction === 'out') {
                     accountIndexFrom = accountIndexPre
                     mintFrom = mintPre
                     ownerFrom = ownerPre
