@@ -42,10 +42,12 @@ const insertParsedTransaction = (req) => {
             // const source = data.transaction.message.accountKeys[instruction.accounts[0]].toBase58();
             // const source = bs58.encode((data.transaction.message.accountKeys[instruction.accounts[0]]).toBuffer('le', 8));
             const source = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[0]]._bn, 'le')).toBuffer());
-            // const destination = data.transaction.message.accountKeys[instruction.accounts[1]].toBase58();
             const destination = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[1]]._bn, 'le')).toBuffer());
+            console.log(`source: ${source}`);
+            console.log(`destination: ${destination}`);
+            // const destination = data.transaction.message.accountKeys[instruction.accounts[1]].toBase58();
             // const destination = bs58.encode((data.transaction.message.accountKeys[instruction.accounts[1]]).toBuffer('le', 8));
-            const lamports = Number((new Buffer((bs58.decode(instruction.data)).slice(4,12))).readBigUInt64LE());
+            const lamports = Number(( Buffer.from((bs58.decode(instruction.data)).slice(4,12)) ).readBigUInt64LE());
             const decimals = 9;
             const solAmount = lamports / LAMPORTS_PER_SOL;
             const signature = data.transaction.signatures[0];
@@ -56,7 +58,7 @@ const insertParsedTransaction = (req) => {
             // await client.query(insertText, [program, type, signature, err, slot, blocktime, fee, source, destination, lamports, decimals, solAmount]);
             
             return new Promise(function(resolve, reject) {
-                pool.query(`INSERT INTO webhooks_sol_event_log(program, type, signature, err, slot, blocktime, fee, source, destination, lamports, decimals, sol_amount) VALUES(${program}, ${type}, ${signature}, ${err}, ${slot}, ${blocktime}, ${fee}, ${source}, ${destination}, ${lamports}, ${decimals}, ${solAmount});`, (error, results) => {
+                pool.query(`INSERT INTO webhooks_sol_event_log(program, type, signature, err, slot, blocktime, fee, source, destination, lamports, decimals, sol_amount) VALUES('${program}', '${type}', '${signature}', '${err}', ${slot}, ${blocktime}, ${fee}, '${source}', '${destination}', ${lamports}, ${decimals}, ${solAmount});`, (error, results) => {
                   if (error) {
                     reject(error)
                     console.log("insert FAILED!");
