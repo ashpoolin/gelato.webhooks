@@ -1,5 +1,9 @@
 // const { json } = require('express');
 const bs58 = require('bs58');
+const BN = require('bn.js');
+const Buffer = require('buffer').Buffer;
+// import BN from 'bn.js';
+// import {Buffer} from 'buffer';
 require('dotenv').config();
 const Pool = require('pg').Pool
 const pool = new Pool({
