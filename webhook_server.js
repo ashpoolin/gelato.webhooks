@@ -39,10 +39,21 @@ const insertParsedTransaction = (req) => {
         if ( data.transaction.message.accountKeys[instruction.programIdIndex] == '11111111111111111111111111111111' && instruction.data.substring(0,2) == '3B') {
             console.log("we made it!")
             const program = 'system';
+
+            // this relies on solana/web3.js PublicKey type
             // const source = data.transaction.message.accountKeys[instruction.accounts[0]].toBase58();
+            
+            // nope, this still relies on solana/web3.js PublicKey type
             // const source = bs58.encode((data.transaction.message.accountKeys[instruction.accounts[0]]).toBuffer('le', 8));
-            const source = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[0]]._bn, 'le')).toBuffer());
-            const destination = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[1]]._bn, 'le')).toBuffer());
+            
+            // not working, hard way w/o solana/web3.js
+            // const source = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[0]]._bn, 'le')).toBuffer());
+            // const destination = bs58.encode((new BN(data.transaction.message.accountKeys[instruction.accounts[1]]._bn, 'le')).toBuffer());
+
+            // do it the non-midwit way:
+            const source = `${data.transaction.message.accountKeys[instruction.accounts[0]]}`
+            const destination = `${data.transaction.message.accountKeys[instruction.accounts[1]]}`
+
             console.log(`source: ${source}`);
             console.log(`destination: ${destination}`);
             // const destination = data.transaction.message.accountKeys[instruction.accounts[1]].toBase58();
