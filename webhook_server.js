@@ -84,17 +84,6 @@ const insertParsedTransaction = (req) => {
         }
     });
 
-  // TEST INSERT TO DATABASE
-  return new Promise(function(resolve, reject) {
-    pool.query(`INSERT INTO hello_world(first_col) VALUES('${data.transaction.signatures[0]}')`, (error, results) => {
-      if (error) {
-        reject(error)
-      }
-      resolve(results.rows);
-      console.log("insert OK");
-
-    })
-  }); 
 }
 
 const test = () => {
